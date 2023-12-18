@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:login_screen_updated/UI/home.dart';
-import 'package:login_screen_updated/UI/register.dart';
+import 'package:login_screen_updated/UI/home_screen.ui.dart';
+import 'package:login_screen_updated/UI/register_screen.ui.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -15,6 +16,26 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    super.initState();
+    _loadSavedCredentials();
+  }
+
+  _loadSavedCredentials() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _usernameController.text = prefs.getString('email') ?? '';
+      _passwordController.text = prefs.getString('password') ?? '';
+    });
+  }
+
+  _saveCredentials(String email, String password) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('email', email);
+    prefs.setString('password', password);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -25,7 +46,9 @@ class _LoginScreenState extends State<LoginScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
             // App logo
             //TODO 1: Container with application logo
 
@@ -72,7 +95,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   // Perform login logic here
                   String username = _usernameController.text;
                   String password = _passwordController.text;
-                  // TODO: Implement login logic with username and password
+
+                  _saveCredentials(username, password);
+
                   print('Username: $username\nPassword: $password');
 
                   Navigator.push(
@@ -112,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 // Navigate to the registration screen
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => RegisterScreen()),
+                  MaterialPageRoute(builder: (context) => const RegisterScreen()),
                 );
               },
               child: const Text(
