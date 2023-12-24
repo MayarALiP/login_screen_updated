@@ -1,39 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:login_screen_updated/UI/home_screen.ui.dart';
-import 'package:login_screen_updated/UI/register_screen.ui.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:email_validator/email_validator.dart';
+import 'package:login_screen_updated/pages/home_screen.pages.dart';
+import 'package:login_screen_updated/pages/register_screen.pages.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
-
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
+
+  late GlobalKey<FormState> fromKey;
+
+  bool obscureText = true;
+
 
   @override
   void initState() {
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+    fromKey = GlobalKey<FormState>();
     super.initState();
-    _loadSavedCredentials();
   }
 
-  _loadSavedCredentials() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _usernameController.text = prefs.getString('email') ?? '';
-      _passwordController.text = prefs.getString('password') ?? '';
-    });
+  void toggleObscure() {
+    obscureText = !obscureText;
+    setState(() {});
   }
 
-  _saveCredentials(String email, String password) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('email', email);
-    prefs.setString('password', password);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,42 +40,53 @@ class _LoginScreenState extends State<LoginScreen> {
         centerTitle: true,
         title: const Text('Login Screen'),
       ),
+
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
-          key: _formKey,
+          key: fromKey,
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
             // App logo
             //TODO 1: Container with application logo
 
-            // user name text Field
+            // email text Field
             TextFormField(
-              controller: _usernameController,
-              decoration: const InputDecoration(
-                labelText: 'Username',
-                icon: Icon(Icons.person),
-              ),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Please enter your username';
-                }
-                return null;
-              },
-            ),
+                keyboardType: TextInputType.emailAddress,
+                controller: emailController,
+                decoration: const InputDecoration(
+                  label: Text('Email'),
+                  suffixIcon: Icon(Icons.email),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'email is required';
+                  }
+
+                  if (!EmailValidator.validate(value)) {
+                    return 'Not Valid Email';
+                  }
+                  return null;
+                }),
 
             //space in between text fields
-            const SizedBox(height: 20.0),
+            const SizedBox(height: 16.0),
 
             // Password text Field
             TextFormField(
-              controller: _passwordController,
-              decoration: const InputDecoration(
+              controller: passwordController,
+              decoration: InputDecoration(
                 labelText: 'Password',
-                icon: Icon(Icons.lock),
+                icon: const Icon(Icons.lock),
+                  suffixIcon: InkWell(
+                    onTap: () => toggleObscure(),
+                    child: Icon(obscureText
+                        ? Icons.visibility_off
+                        : Icons.visibility),
+                  )
               ),
-              obscureText: true,
+              obscureText: obscureText,
               validator: (value) {
                 if (value!.isEmpty) {
                   return 'Please enter your password';
@@ -87,16 +96,14 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
 
             //space in between text fields
-            const SizedBox(height: 20.0),
+            const SizedBox(height: 16.0),
 
             ElevatedButton(
               onPressed: () {
-                if (_formKey.currentState!.validate()) {
+                if (fromKey.currentState!.validate()) {
                   // Perform login logic here
-                  String username = _usernameController.text;
-                  String password = _passwordController.text;
-
-                  _saveCredentials(username, password);
+                  String username = emailController.text;
+                  String password = passwordController.text;
 
                   print('Username: $username\nPassword: $password');
 
@@ -111,7 +118,8 @@ class _LoginScreenState extends State<LoginScreen> {
               child: const Text('Login'),
             ),
 
-            const SizedBox(height: 10.0),
+           //space in between text fields
+                const SizedBox(height: 10.0),
 
             ElevatedButton(
               onPressed: () {
@@ -121,7 +129,8 @@ class _LoginScreenState extends State<LoginScreen> {
               child: const Text('Login with Google'),
             ),
 
-            const SizedBox(height: 10.0),
+           //space in between text fields
+                const SizedBox(height: 10.0),
 
             ElevatedButton(
               onPressed: () {
@@ -131,7 +140,9 @@ class _LoginScreenState extends State<LoginScreen> {
               child: const Text('Login with Facebook'),
             ),
 
-            const SizedBox(height: 20.0),
+           //space in between text fields
+                const SizedBox(height: 20.0),
+
             GestureDetector(
               onTap: () {
                 // Navigate to the registration screen

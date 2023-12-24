@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:login_screen_updated/Functions/save_user_data.function.dart';
-import 'package:login_screen_updated/UI/home_screen.ui.dart';
+import 'package:login_screen_updated/pages/home_screen.pages.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -131,7 +130,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       String lastName = _lastNameController.text;
                       String email = _emailController.text;
                       String password = _passwordController.text;
-                      saveUserData(firstName, lastName, email, password);
+                      // saveUserData(firstName, lastName, email, password);
                       print('First Name: $firstName'
                           '\nLast Name: $lastName'
                           '\nEmail: $email');
