@@ -1,7 +1,10 @@
+// ignore_for_file: avoid_print
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:login_screen_updated/pages/home_screen.pages.dart';
 import 'package:login_screen_updated/pages/register_screen.pages.dart';
+import 'package:login_screen_updated/widgets/CenterdLogo.widgets.dart';
+import 'package:login_screen_updated/utilities/colors.utilities.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -10,20 +13,16 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
-  late TextEditingController emailController;
-  late TextEditingController passwordController;
-
-  late GlobalKey<FormState> fromKey;
-
+  late TextEditingController _emailController;
+  late TextEditingController _passwordController;
+  late GlobalKey<FormState> _fromKey;
   bool obscureText = true;
-
 
   @override
   void initState() {
-    emailController = TextEditingController();
-    passwordController = TextEditingController();
-    fromKey = GlobalKey<FormState>();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+    _fromKey = GlobalKey<FormState>();
     super.initState();
   }
 
@@ -32,135 +31,188 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {});
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Login Screen'),
-      ),
-
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: fromKey,
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-            // App logo
-            //TODO 1: Container with application logo
-
-            // email text Field
-            TextFormField(
-                keyboardType: TextInputType.emailAddress,
-                controller: emailController,
-                decoration: const InputDecoration(
-                  label: Text('Email'),
-                  suffixIcon: Icon(Icons.email),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'email is required';
-                  }
-
-                  if (!EmailValidator.validate(value)) {
-                    return 'Not Valid Email';
-                  }
-                  return null;
-                }),
-
-            //space in between text fields
-            const SizedBox(height: 16.0),
-
-            // Password text Field
-            TextFormField(
-              controller: passwordController,
-              decoration: InputDecoration(
-                labelText: 'Password',
-                icon: const Icon(Icons.lock),
-                  suffixIcon: InkWell(
-                    onTap: () => toggleObscure(),
-                    child: Icon(obscureText
-                        ? Icons.visibility_off
-                        : Icons.visibility),
-                  )
-              ),
-              obscureText: obscureText,
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Please enter your password';
-                }
-                return null;
-              },
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+//----------------------------- background Image--------------------------------
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+              "assets/images/splash.png",
             ),
-
-            //space in between text fields
-            const SizedBox(height: 16.0),
-
-            ElevatedButton(
-              onPressed: () {
-                if (fromKey.currentState!.validate()) {
-                  // Perform login logic here
-                  String username = emailController.text;
-                  String password = passwordController.text;
-
-                  print('Username: $username\nPassword: $password');
-
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const HomeScreen(),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+//-----------------------------------Logo---------------------------------------
+          const CenterdLogo(),
+//----------------------------------Sign in text -------------------------------
+          const Padding(
+            padding: EdgeInsets.only(top: 16),
+            child: Text(
+              "Sign In",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: "Hellix-LightItalic.ttf"),
+            ),
+          ),
+//-------------------------------Email Text Field-------------------------------
+          Form(
+            key: _fromKey,
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+                child: TextFormField(
+                    keyboardType: TextInputType.emailAddress,
+                    controller: _emailController,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: const InputDecoration(
+                      label: Text(
+                        'Email Address',
+                        style: TextStyle(color: Colors.white60),
+                      ),
+                      prefixIcon: Icon(
+                        Icons.email_outlined,
+                        color: Colors.white60,
+                      ),
                     ),
-                  );
-                }
-              },
-              child: const Text('Login'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'email is required';
+                      }
+
+                      if (!EmailValidator.validate(value)) {
+                        return 'Not Valid Email';
+                      }
+                      return null;
+                    }),
+              ),
+//-------------------------------Password Text Field----------------------------
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+                child: TextFormField(
+                  controller: _passwordController,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    label: const Text(
+                      'Password',
+                      style: TextStyle(
+                        color: Colors.white60,
+                      ),
+                    ),
+                    prefixIcon: const Icon(
+                      Icons.lock_open,
+                      color: Colors.white60,
+                    ),
+                    suffixIcon: InkWell(
+                      onTap: () => toggleObscure(),
+                      child: Icon(
+                        obscureText
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
+                        color: Colors.white60,
+                      ),
+                    ),
+                  ),
+                  obscureText: obscureText,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter your password';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+//-------------------------------Forgot Password--------------------------------
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                  InkWell(
+                    onTap: () {},
+                    child: const Text(
+                      "Forgot Password?",
+                      style:
+                          TextStyle(color: Color(ColorsConst.titleBlueColor)),
+                    ),
+                  ),
+                ]),
+              ),
+            ]),
+          ),
+//-------------------------------Sing in button---------------------------------
+          Padding(
+            padding: const EdgeInsets.fromLTRB(32.0, 8.0, 32.0, 100.0),
+            child: Container(
+              width: double.infinity,
+              color: Colors.transparent,
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                      const Color(ColorsConst.orangeColor)),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                ),
+                onPressed: () {
+                  if (_fromKey.currentState!.validate()) {
+                    String username = _emailController.text;
+                    String password = _passwordController.text;
+                    print('Username: $username\nPassword: $password');
+
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HomeScreen(),
+                      ),
+                    );
+                  }
+                },
+                child: const Text(
+                  'Sing In',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Color(ColorsConst.containerWhiteBackgroundColor),
+                  ),
+                ),
+              ),
             ),
+          ),
 
-           //space in between text fields
-                const SizedBox(height: 10.0),
-
-            ElevatedButton(
-              onPressed: () {
-                // TODO: Implement Facebook login logic
-                print('Login with Facebook');
-              },
-              child: const Text('Login with Google'),
+//--------------------------------Ask to register-------------------------------
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            const Text(
+              "Don't have an account?",
+              style: TextStyle(
+                color: Color(ColorsConst.containerWhiteBackgroundColor),
+                fontFamily: "Hellix-LightItalic.ttf",
+              ),
             ),
-
-           //space in between text fields
-                const SizedBox(height: 10.0),
-
-            ElevatedButton(
-              onPressed: () {
-                // TODO: Implement Google login logic
-                print('Login with Google');
-              },
-              child: const Text('Login with Facebook'),
-            ),
-
-           //space in between text fields
-                const SizedBox(height: 20.0),
-
-            GestureDetector(
+            InkWell(
               onTap: () {
-                // Navigate to the registration screen
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const RegisterScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const RegisterScreen()),
                 );
               },
               child: const Text(
-                'New here? Register now!',
+                "Register",
                 style: TextStyle(
-                  color: Colors.blue,
-                  decoration: TextDecoration.underline,
+                  color: Color(ColorsConst.orangeColor),
+                  fontFamily: "Hellix-LightItalic.ttf",
                 ),
               ),
-            ),
+            )
           ]),
-        ),
+        ]),
       ),
     );
   }

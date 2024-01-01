@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:login_screen_updated/pages/home_screen.pages.dart';
+import 'package:login_screen_updated/pages/logIn_screen.pages.dart';
+import 'package:login_screen_updated/utilities/colors.utilities.dart';
+import 'package:login_screen_updated/widgets/CenterdLogo.widgets.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -9,71 +12,107 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final TextEditingController _firstNameController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _rePasswordController = TextEditingController();
+  late TextEditingController _FullNameController = TextEditingController();
+  late final TextEditingController _emailController = TextEditingController();
+  late TextEditingController _passwordController = TextEditingController();
+  late GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool obscureText = true;
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  @override
+  void initState() {
+    _FullNameController = TextEditingController();
+    _passwordController = TextEditingController();
+    _formKey = GlobalKey<FormState>();
+
+    super.initState();
+  }
+
+  void toggleObscure() {
+    obscureText = !obscureText;
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Register Screen'),
-      ),
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+//----------------------------- background Image--------------------------------
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+              "assets/images/splash.png",
+            ),
+            fit: BoxFit.cover,
+          ),
+        ),
 
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+//-----------------------------------Logo---------------------------------------
+          const CenterdLogo(),
+//----------------------------------Register text ------------------------------
+          const Padding(
+            padding: EdgeInsets.only(top: 16),
+            child: Text(
+              "Register",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                fontFamily: "Hellix-LightItalic.ttf",
+              ),
+            ),
+          ),
 
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
+//-----------------------------Full Name text Field-----------------------------
+          Form(
             key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // First Name field
-                TextFormField(
-                  controller: _firstNameController,
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+                child: TextFormField(
+                  controller: _FullNameController,
+                  style: const TextStyle(color: Colors.white),
                   decoration: const InputDecoration(
-                    labelText: 'First Name',
-                    icon: Icon(Icons.person),
+                    label: Text(
+                      'Full Name',
+                      style: TextStyle(color: Colors.white60),
+                    ),
+                    prefixIcon: Icon(
+                      Icons.person_outlined,
+                      color: Colors.white60,
+                    ),
                   ),
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Please enter your first name';
+                      return 'Please enter your User Name';
                     }
                     return null;
                   },
                 ),
-                const SizedBox(height: 10.0),
+              ),
 
-                // Last Name field
-                TextFormField(
-                  controller: _lastNameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Last Name',
-                    icon: Icon(Icons.person),
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter your last name';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 10.0),
-
-                // Email field
-                TextFormField(
+//----------------------------------Email text Field ---------------------------
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+                child: TextFormField(
+                  keyboardType: TextInputType.emailAddress,
                   controller: _emailController,
+                  style: const TextStyle(color: Colors.white),
                   decoration: const InputDecoration(
-                    labelText: 'E-Mail',
-                    icon: Icon(Icons.email),
+                    label: Text(
+                      'Email Address',
+                      style: TextStyle(color: Colors.white60),
+                    ),
+                    prefixIcon: Icon(
+                      Icons.email_outlined,
+                      color: Colors.white60,
+                    ),
                   ),
                   validator: (value) {
-                    if (value!.isEmpty||!(value.contains('@'))) {
+                    if (value!.isEmpty || !(value.contains('@'))) {
                       return 'Please enter your email';
                     } else if (!RegExp(
                             r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$')
@@ -83,74 +122,108 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 10.0),
-
-                // Password field
-                TextFormField(
+              ),
+//----------------------------------Password text Field ------------------------
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+                child: TextFormField(
                   controller: _passwordController,
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                    icon: Icon(Icons.lock),
+                  style: const TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    label: const Text(
+                      'Password',
+                      style: TextStyle(
+                        color: Colors.white60,
+                      ),
+                    ),
+                    prefixIcon: const Icon(
+                      Icons.lock_open,
+                      color: Colors.white60,
+                    ),
+                    suffixIcon: InkWell(
+                      onTap: () => toggleObscure(),
+                      child: Icon(
+                        obscureText
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
+                        color: Colors.white60,
+                      ),
+                    ),
                   ),
-                  obscureText: true,
+                  obscureText: obscureText,
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Please enter a password';
+                      return 'Please enter your password';
                     }
                     return null;
                   },
                 ),
-                const SizedBox(height: 10.0),
-
-                // Re_Password field
-                TextFormField(
-                  controller: _rePasswordController,
-                  decoration: const InputDecoration(
-                    labelText: 'Re-enter Password',
-                    icon: Icon(Icons.lock),
+              ),
+            ]),
+          ),
+//----------------------------------Register Button ----------------------------
+          Padding(
+            padding: const EdgeInsets.fromLTRB(32.0, 16.0, 32.0, 0.0),
+            child: Container(
+              width: double.infinity,
+              color: Colors.transparent,
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                      const Color(ColorsConst.orangeColor)),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
                   ),
-                  obscureText: true,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please re-enter your password';
-                    } else if (value != _passwordController.text) {
-                      return 'Passwords do not match';
-                    }
-                    return null;
-                  },
                 ),
-                const SizedBox(height: 20.0),
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    String userName = _FullNameController.text;
+                    String email = _emailController.text;
+                    String password = _passwordController.text;
+                    print(
+                        'Username: $userName \n Email : $email \n Password: $password');
 
-                // login button
-                ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      // Perform registration logic here
-                      String firstName = _firstNameController.text;
-                      String lastName = _lastNameController.text;
-                      String email = _emailController.text;
-                      String password = _passwordController.text;
-                      // saveUserData(firstName, lastName, email, password);
-                      print('First Name: $firstName'
-                          '\nLast Name: $lastName'
-                          '\nEmail: $email');
-
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const HomeScreen(),
-                        ),
-                      );
-
-
-                    }
-                  },
-                  child: const Text('Register'),
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HomeScreen(),
+                      ),
+                    );
+                  }
+                },
+                child: const Text(
+                  'Register',
+                  style: TextStyle(
+                    color: Colors.white, // Use Colors.white for the text color
+                  ),
                 ),
-              ],
+              ),
             ),
           ),
-        ),
+
+//----------------------------------Ask for Sing in ----------------------------------
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            const Text(
+              "Already registered?",
+              style: TextStyle(
+                  color: Color(ColorsConst.containerWhiteBackgroundColor)),
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                );
+              },
+              child: const Text(
+                "Sign in",
+                style: TextStyle(color: Color(ColorsConst.orangeColor)),
+              ),
+            )
+          ]),
+        ]),
       ),
     );
   }

@@ -1,5 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
-import 'package:login_screen_updated/pages/after_splash_screen.dart';
+import 'package:login_screen_updated/pages/after_splash_screen.pages.dart';
 import 'package:login_screen_updated/pages/home_screen.pages.dart';
 import 'package:login_screen_updated/services/preferences.service.dart';
 
@@ -38,9 +39,9 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
+        //TODO 1: make an animation
         child: CircularProgressIndicator(),
       ),
     );
   }
 }
-

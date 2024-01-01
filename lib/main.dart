@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:login_screen_updated/pages/home_screen.pages.dart';
-import 'package:login_screen_updated/pages/logIn_screen.pages.dart';
-import 'package:login_screen_updated/pages/register_screen.pages.dart';
 import 'package:login_screen_updated/pages/splash_screen.pages.dart';
 import 'package:login_screen_updated/services/preferences.service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,12 +27,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-      //   inputDecorationTheme: InputDecorationTheme(
-      //     filled: true,
-      //     fillColor: Colors.grey.shade200,
-      //     border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-      //   ),
-      //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+        //   inputDecorationTheme: InputDecorationTheme(
+        //     filled: true,
+        //     fillColor: Colors.grey.shade200,
+        //     border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+        //   ),
+        //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         useMaterial3: true,
       ),
       home: const SplashScreen(),
