@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:login_screen_updated/pages/logIn_screen.pages.dart';
 import 'package:login_screen_updated/pages/register_screen.pages.dart';
+import 'package:login_screen_updated/utilities/colors.utilities.dart';
 import 'package:login_screen_updated/widgets/CenterdLogo.widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AfterSplashScreen extends StatefulWidget {
   const AfterSplashScreen({super.key});
@@ -30,12 +33,13 @@ class _AfterSplashScreenState extends State<AfterSplashScreen> {
 //------------------------------------------------------------------------------
 
         // TODO :Ask(1) Eng Mahmoud for an alternative solution instead of two Spacer,and what is flex
+
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           const Spacer(),
 
 //------------------------------ logo In the center-----------------------------
           const CenterdLogo(),
-           const SizedBox(height: 8),
+          const SizedBox(height: 8),
           const Text(
             "-Cooking Done The Easy Way-",
             style: TextStyle(
@@ -61,10 +65,17 @@ class _AfterSplashScreenState extends State<AfterSplashScreen> {
                           context,
                           MaterialPageRoute(
                               builder: (_) => const RegisterScreen()));
+                      GetIt.I.get<SharedPreferences>().setBool('isLogin', true);
                     },
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.orange),
-                    ),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            const Color(ColorsConst.orangeColor)),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        )),
                     child: const Text(
                       "Register",
                       style: TextStyle(color: Colors.white),
@@ -95,4 +106,3 @@ class _AfterSplashScreenState extends State<AfterSplashScreen> {
     );
   }
 }
-

@@ -1,10 +1,12 @@
 // ignore_for_file: avoid_print
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:get_it/get_it.dart';
 import 'package:login_screen_updated/pages/home_screen.pages.dart';
 import 'package:login_screen_updated/pages/register_screen.pages.dart';
 import 'package:login_screen_updated/widgets/CenterdLogo.widgets.dart';
 import 'package:login_screen_updated/utilities/colors.utilities.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -47,6 +49,8 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          const Spacer(),
+
 //-----------------------------------Logo---------------------------------------
           const CenterdLogo(),
 //----------------------------------Sign in text -------------------------------
@@ -58,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   color: Colors.white,
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
-                  fontFamily: "Hellix-LightItalic.ttf"),
+                  fontFamily: "LightItalic"),
             ),
           ),
 //-------------------------------Email Text Field-------------------------------
@@ -161,11 +165,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   if (_fromKey.currentState!.validate()) {
-                    String username = _emailController.text;
+                    String email = _emailController.text;
                     String password = _passwordController.text;
-                    print('Username: $username\nPassword: $password');
+                    print('Username: $email \n Password: $password');
+
+                    GetIt.I.get<SharedPreferences>().setBool('isLogin', true);
 
                     Navigator.pushReplacement(
                       context,
@@ -187,12 +193,15 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
 
 //--------------------------------Ask to register-------------------------------
+          const Spacer(),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             const Text(
               "Don't have an account?",
               style: TextStyle(
                 color: Color(ColorsConst.containerWhiteBackgroundColor),
-                fontFamily: "Hellix-LightItalic.ttf",
+                fontFamily: "LightItalic",
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
               ),
             ),
             InkWell(
@@ -207,7 +216,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 "Register",
                 style: TextStyle(
                   color: Color(ColorsConst.orangeColor),
-                  fontFamily: "Hellix-LightItalic.ttf",
+                  fontFamily: "LightItalic",
                 ),
               ),
             )

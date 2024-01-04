@@ -37,7 +37,11 @@ dependencies:
   cupertino_icons: ^1.0.2
   shared_preferences: ^2.2.2
   email_validator: ^2.1.17
+  carousel_slider: ^4.2.1
+  dots_indicator: ^3.0.0
   google_fonts: ^6.1.0
+  flutter_svg: ^2.0.9
+  get_it: ^7.6.4
 
 
 
@@ -66,6 +70,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - assets/data/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -80,9 +85,9 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-     - family: MyFont
+     - family: LightItalic
        fonts:
-         - asset: fonts/
+         - asset: assets/fonts/Hellix-LightItalic.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

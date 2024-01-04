@@ -49,6 +49,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
 
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          const Spacer(),
 //-----------------------------------Logo---------------------------------------
           const CenterdLogo(),
 //----------------------------------Register text ------------------------------
@@ -60,7 +61,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 color: Colors.white,
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
-                fontFamily: "Hellix-LightItalic.ttf",
+                fontFamily: "LightItalic",
               ),
             ),
           ),
@@ -93,7 +94,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   },
                 ),
               ),
-
 //----------------------------------Email text Field ---------------------------
               Padding(
                 padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
@@ -188,7 +188,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const HomeScreen(),
+                        builder: (context) => HomeScreen(),
                       ),
                     );
                   }
@@ -204,6 +204,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
 
 //----------------------------------Ask for Sing in ----------------------------------
+          const Spacer(),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             const Text(
               "Already registered?",
